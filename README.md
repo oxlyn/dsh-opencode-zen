@@ -70,6 +70,19 @@ A: They use OpenCode Zen's official public free tier. Service availability and q
 
 Registers an `opencode` LLM provider route via `ctx.llm.registerAdapter(['opencode'], adapter)`, exposing the OpenCode Zen free models to session models and sub-agents alike.
 
+## Development
+
+The source is TypeScript under `src/`, bundled by [tsdown](https://tsdown.dev) into a single CJS file `lib/index.js` (the build output is committed, so installers don't need to build):
+
+```sh
+npm install
+npm run build      # tsdown → lib/index.js + lib/index.d.ts
+npm run typecheck  # tsc --noEmit
+npm test           # smoke test (mocked fetch, no real network)
+```
+
+Layout: `src/index.ts` (plugin entry), `src/adapter.ts` (adapter extending dsh-llm's `LlmAdapter`), `src/stream.ts` (SSE + chunk translation), `src/messages.ts` (message serialization), `src/keys.ts` (key pool rotation), `src/constants.ts`, `src/jsx.ts` (zero-dependency JSX factory — classic `h`/`Fragment`, usable from any `.tsx` for a future console UI or message DSL).
+
 ## License
 
 MIT

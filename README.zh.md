@@ -70,6 +70,31 @@ A: 使用的是 OpenCode Zen 官方公开免费档。服务可用性和额度限
 
 通过 `ctx.llm.registerAdapter(['opencode'], adapter)` 注册 LLM 提供器路由，把 OpenCode Zen 免费模型挂进 DSH 模型体系，会话模型、子代理都能用。
 
+## 开发
+
+源码为 TypeScript，位于 `src/`，用 [tsdown](https://tsdown.dev) 打包成 CJS 单文件 `lib/index.js`（构建产物随仓库提交，安装方无需本地构建）：
+
+```sh
+npm install
+npm run build      # tsdown → lib/index.js + lib/index.d.ts
+npm run typecheck  # tsc --noEmit
+npm test           # 冒烟测试（mock fetch，无真实网络）
+```
+
+代码结构：
+
+| 文件 | 职责 |
+|---|---|
+| `src/index.ts` | 插件入口：`name` / `inject` / `apply` |
+| `src/adapter.ts` | `OpenCodeZenAdapter`（继承 dsh-llm 的 `LlmAdapter`） |
+| `src/stream.ts` | SSE 解析、OpenAI chunk → DSH StreamChunk 翻译 |
+| `src/messages.ts` | Harness 消息 → wire 协议序列化 |
+| `src/keys.ts` | key pool 读取与轮询 |
+| `src/constants.ts` | 模型目录与请求常量 |
+| `src/jsx.ts` | 零依赖 JSX 工厂（`h` / `Fragment`），写 `.tsx` 时可用 |
+
+JSX：tsconfig 已开启经典 JSX（工厂 `h`，片段 `Fragment`），`import { h, Fragment } from './jsx'` 后即可在 `.tsx` 里写 JSX，产出纯数据 vnode，不引入 React 依赖（预留未来控制台 UI / 消息 DSL）。
+
 ## 许可
 
 MIT

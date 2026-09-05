@@ -4,8 +4,10 @@
   "version": "0.1.0",
   "type": "commonjs",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "default": "./lib/index.js"
     },
     "./package.json": "./package.json"
@@ -13,6 +15,12 @@
   "files": [
     "lib"
   ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "node verify.mjs"
+  },
   "license": "MIT",
   "dsh": {
     "bundle": {
@@ -37,5 +45,13 @@
     "free",
     "llm",
     "provider"
-  ]
+  ],
+  "devDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-llm": "^0.1.0-rc.6",
+    "@deepseek-ai/schemastery": "^3.18.2",
+    "@types/node": "^26.4.1",
+    "tsdown": "^0.22.14",
+    "typescript": "^7.0.2"
+  }
 }
